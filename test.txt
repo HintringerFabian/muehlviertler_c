@@ -1,0 +1,9 @@
+jz start ma moi.
+mia habn x, y, z.
+schreib 'oachkatzlschwoaf'.
+x is 10 + 5.
+
+schreib x.
+schreib (5+5).
+
+Jez hean ma auf!
