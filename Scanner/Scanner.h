@@ -41,6 +41,8 @@ private:
 
     void NewChar();
     void updateCurrCharInLine();
+    void assignSy(Symbols::Symbol symbol);
+    void assignSyNewChar(Symbols::Symbol symbol);
 };
 
 

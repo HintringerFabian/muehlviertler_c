@@ -40,8 +40,16 @@ bool Interpreter::symbolIsNot(Symbols::Symbol symbol) {
     return !success;
 }
 
+bool Interpreter::symbolIs(Symbols::Symbol symbol) {
+    return scanner->getCurrentSymbol() == symbol;
+}
+
+bool Interpreter::sameSymbol(Symbols::Symbol symbol1, Symbols::Symbol symbol2) {
+    return symbol1 == symbol2;
+}
+
 void Interpreter::muehlviertlerC() {
-    if (scanner->getCurrentSymbol() == Symbols::miaSy) {
+    if (symbolIs(Symbols::miaSy)) {
         variableDec();
         if (!success) return;
         if (symbolIsNot(Symbols::periodSy)) return;
@@ -55,7 +63,7 @@ void Interpreter::muehlviertlerC() {
 }
 
 void Interpreter::variableDec() {
-    if (scanner->getCurrentSymbol() != Symbols::miaSy) {
+    if (!symbolIs(Symbols::miaSy)) {
         return;
     }
     scanner->NewSy();
@@ -68,7 +76,7 @@ void Interpreter::variableDec() {
 
     scanner->NewSy();
 
-    while (scanner->getCurrentSymbol() == Symbols::commaSy) {
+    while (symbolIs(Symbols::commaSy)) {
         scanner->NewSy();
         if (symbolIsNot(Symbols::identSy)) return;
 
@@ -86,7 +94,7 @@ void Interpreter::statSeq() {
     stat();
     if (!success) return;
 
-    while (scanner->getCurrentSymbol() == Symbols::periodSy && scanner->getCurrentSymbol() != Symbols::jezSy){
+    while (symbolIs(Symbols::periodSy) && !symbolIs(Symbols::jezSy)){
         scanner->NewSy();
         stat();
         if (!success) return;
@@ -115,7 +123,7 @@ void Interpreter::stat() {
             scanner->NewSy();
             Symbols::Symbol sy = scanner->getCurrentSymbol();
 
-            if (sy == Symbols::identSy) {
+            if (sameSymbol(sy, Symbols::identSy)) {
                 std::string ident = scanner->getIdent();
                 if (not symTab.isDeclared(ident)) {
                     success = false;
@@ -123,7 +131,7 @@ void Interpreter::stat() {
                 }
                 std::cout << symTab.getValue(ident) << std::endl;
                 scanner->NewSy();
-            } else if (sy == Symbols::leftParSy) {
+            } else if (sameSymbol(sy, Symbols::leftParSy)) {
                 scanner->NewSy();
                 int result = expr();
                 if (!success) return;
@@ -131,7 +139,7 @@ void Interpreter::stat() {
                 std::cout << result << std::endl;
                 if (symbolIsNot(Symbols::rightParSy)) return;
                 scanner->NewSy();
-            } else if (sy == Symbols::singleQuoteSy) {
+            } else if (sameSymbol(sy, Symbols::singleQuoteSy)) {
                 std::cout << scanner->getComment() << std::endl;
                 scanner->NewSy();
             }
@@ -146,7 +154,7 @@ int Interpreter::expr() {
     if (!success) return -1;
 
     Symbols::Symbol currentSymbol = scanner->getCurrentSymbol();
-    while (currentSymbol == Symbols::plusSy || currentSymbol == Symbols::minusSy) {
+    while (sameSymbol(currentSymbol, Symbols::plusSy) || sameSymbol(currentSymbol, Symbols::minusSy)) {
         switch (currentSymbol) {
             case Symbols::plusSy:
                 scanner->NewSy();
@@ -170,7 +178,7 @@ int Interpreter::term() {
     if (!success) return -1;
 
     Symbols::Symbol currentSymbol = scanner->getCurrentSymbol();
-    while (currentSymbol == Symbols::timesSy || currentSymbol == Symbols::dividedSy) {
+    while (sameSymbol(currentSymbol, Symbols::timesSy) || sameSymbol(currentSymbol, Symbols::dividedSy)) {
         switch (currentSymbol) {
             case Symbols::timesSy:
                 scanner->NewSy();
@@ -237,4 +245,3 @@ void Interpreter::ending() {
     if (symbolIsNot(Symbols::callSignSy)) return;
     scanner->NewSy();
 }
-

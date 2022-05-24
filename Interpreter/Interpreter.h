@@ -24,6 +24,8 @@ private:
 
     void semError(const std::string& message);
     bool symbolIsNot(Symbols::Symbol symbol);
+    bool symbolIs(Symbols::Symbol symbol);
+    bool sameSymbol(Symbols::Symbol symbol1, Symbols::Symbol symbol2);
 
     void muehlviertlerC();
     void variableDec();

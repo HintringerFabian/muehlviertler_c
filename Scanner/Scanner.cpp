@@ -35,61 +35,51 @@ void Scanner::NewSy() {
 
     switch (currChar) {
         case char(0):
-            currSy = Symbols::eofSy;
+            assignSy(Symbols::eofSy);
             break;
 
         case '+':
-            currSy = Symbols::plusSy;
-            NewChar();
+            assignSyNewChar(Symbols::plusSy);
             break;
 
         case '-':
-            currSy = Symbols::minusSy;
-            NewChar();
+            assignSyNewChar(Symbols::minusSy);
             break;
 
         case '*':
-            currSy = Symbols::timesSy;
-            NewChar();
+            assignSyNewChar(Symbols::timesSy);
             break;
 
         case '/':
-            currSy = Symbols::dividedSy;
-            NewChar();
+            assignSyNewChar(Symbols::dividedSy);
             break;
 
         case '(':
-            currSy = Symbols::leftParSy;
-            NewChar();
+            assignSyNewChar(Symbols::leftParSy);
             break;
 
         case ')':
-            currSy = Symbols::rightParSy;
-            NewChar();
+            assignSyNewChar(Symbols::rightParSy);
             break;
 
         case ',':
-            currSy = Symbols::commaSy;
-            NewChar();
+            assignSyNewChar(Symbols::commaSy);
             break;
 
         case '.':
-            currSy = Symbols::periodSy;
-            NewChar();
+            assignSyNewChar(Symbols::periodSy);
             break;
 
         case '\'':
-            currSy = Symbols::singleQuoteSy;
-            NewChar();
+            assignSyNewChar(Symbols::singleQuoteSy);
             break;
 
         case '!':
-            currSy = Symbols::callSignSy;
-            NewChar();
+            assignSyNewChar(Symbols::callSignSy);
             break;
 
         case '0' ... '9':
-            currSy = Symbols::numberSy;
+            assignSy(Symbols::numberSy);
             numberVal = 0;
 
             while ((currChar >= '0') && (currChar <= '9')) {
@@ -113,31 +103,40 @@ void Scanner::NewSy() {
             for (char &c: identString) c = toupper(c);
 
             if (identString == "SCHREIB" || identString == "SCHPEIB") {
-                currSy = Symbols::writeSy;
+                assignSy(Symbols::writeSy);
+
             } else if (identString == "MIA") {
-                currSy = Symbols::miaSy;
+                assignSy(Symbols::miaSy);
+
             } else if (identString == "HABN" ||
                         identString == "NEHMAN") {
-                currSy = Symbols::habnSy;
+                assignSy(Symbols::habnSy);
+
             } else if (identString == "IS") {
-                currSy = Symbols::assignSy;
+                assignSy(Symbols::assignSy);
+
             } else if (identString == "JEZ") {
-                currSy = Symbols::jezSy;
+                assignSy(Symbols::jezSy);
+
             } else if (identString == "HEAN") {
-                currSy = Symbols::heanSy;
+                assignSy(Symbols::heanSy);
+
             } else if (identString == "MA") {
-                currSy = Symbols::maSy;
+                assignSy(Symbols::maSy);
+
             } else if (identString == "AUF") {
-                currSy = Symbols::aufSy;
+                assignSy(Symbols::aufSy);
+
             } else if (identString == "!") {
-                currSy = Symbols::callSignSy;
+                assignSy(Symbols::callSignSy);
+
             } else {
-                currSy = Symbols::identSy;
+                assignSy(Symbols::identSy);
             }
             break;
 
         default:
-            currSy = Symbols::errorSy;
+            assignSy(Symbols::errorSy);
             break;
     }
 }
@@ -197,4 +196,13 @@ void Scanner::NewChar() {
 void Scanner::updateCurrCharInLine() {
     charColumnNumber++;
     currChar = line[charColumnNumber - 1];
+}
+
+void Scanner::assignSy(Symbols::Symbol symbol) {
+    currSy = symbol;
+}
+
+void Scanner::assignSyNewChar(Symbols::Symbol symbol) {
+    assignSy(symbol);
+    NewChar();
 }
